@@ -1,0 +1,16 @@
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and scratch
+*.log
+tmp/
+scratch/
+node_modules/
+package-lock.json
+
+# Nothing else belongs in this repository: it is a static site with no build
+# step, no dependencies and no secrets.
