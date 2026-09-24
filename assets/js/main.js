@@ -1,59 +1,72 @@
-// Profile site behaviour: footer year, smooth anchor offset, active nav state.
+// Profile behaviour: smooth anchor scrolling, active sidebar state, and
+// reveal-on-scroll for the fade-up sections.
 (function () {
   'use strict';
 
-  // Keep the copyright year current without a build step.
-  var y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
+  var year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
 
-  // Sticky header overlaps anchors, so scroll the target into view manually.
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+  // Sidebar is fixed on desktop and a bottom bar on mobile, so offset the
+  // scroll target to clear it.
+  function headerOffset() {
+    if (window.matchMedia('(max-width: 900px)').matches) return 76;
+    return 24;
+  }
+
+  document.querySelectorAll('a.scroller').forEach(function (link) {
     link.addEventListener('click', function (e) {
-      var id = link.getAttribute('href');
-      if (!id || id === '#') return;
-      var target = document.querySelector(id);
+      var href = link.getAttribute('href');
+      if (!href || href.charAt(0) !== '#') return;
+      var target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
-      var top = target.getBoundingClientRect().top + window.pageYOffset - 68;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset();
       window.scrollTo({ top: top, behavior: 'smooth' });
-      history.replaceState(null, '', id);
+      history.replaceState(null, '', href);
     });
   });
 
   // Highlight the section currently in view.
-  var sections = Array.prototype.slice.call(
-    document.querySelectorAll('main section[id]')
-  );
-  var links = {};
-  document.querySelectorAll('.nav-links a').forEach(function (a) {
-    links[a.getAttribute('href').slice(1)] = a;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+  var navLinks = {};
+  document.querySelectorAll('#sidebar nav a').forEach(function (a) {
+    navLinks[a.getAttribute('href').slice(1)] = a;
   });
 
-  function onScroll() {
-    var pos = window.pageYOffset + 100;
+  function update() {
+    var pos = window.pageYOffset + window.innerHeight * 0.35;
     var current = null;
-    sections.forEach(function (s) {
-      if (s.offsetTop <= pos) current = s.id;
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s.id; });
+    Object.keys(navLinks).forEach(function (id) {
+      navLinks[id].classList.remove('active');
     });
-    Object.keys(links).forEach(function (id) {
-      links[id].style.background = '';
-      links[id].style.color = '';
-    });
-    if (current && links[current]) {
-      links[current].style.background = 'var(--accent-soft)';
-      links[current].style.color = 'var(--accent)';
-    }
+    if (current && navLinks[current]) navLinks[current].classList.add('active');
+  }
+
+  // Reveal fade-up sections as they enter the viewport.
+  var fades = document.querySelectorAll('.fade-up');
+  // Only hide content once we know we can reveal it again.
+  if ('IntersectionObserver' in window && fades.length) {
+    Array.prototype.forEach.call(fades, function (el) { el.classList.add('js-reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    Array.prototype.forEach.call(fades, function (el) { io.observe(el); });
+  } else {
+    Array.prototype.forEach.call(fades, function (el) { el.classList.add('in'); });
   }
 
   var ticking = false;
   window.addEventListener('scroll', function () {
     if (ticking) return;
     ticking = true;
-    window.requestAnimationFrame(function () {
-      onScroll();
-      ticking = false;
-    });
+    window.requestAnimationFrame(function () { update(); ticking = false; });
   }, { passive: true });
 
-  onScroll();
+  update();
 })();
