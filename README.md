@@ -134,6 +134,32 @@ markup cannot claim something the page does not say), heading order, alt text,
 and that the crawl files are served. It runs against any URL, so the same check
 works against production.
 
+### Telling search engines about changes
+
+The classic sitemap ping endpoints are dead: Google deprecated its in June 2023
+and the endpoint now returns 404, and Bing returns 410. This site uses IndexNow
+instead, which needs no account.
+
+```
+python _indexnow_submit.py https://johnie-musyoki.github.io/johnie-profile/
+```
+
+The key is committed at the repository root, because GitHub Pages serves a
+project site from a `/johnie-profile/` prefix, so the key file has to be
+reachable at the host root for verification to pass. The script checks the key
+file is actually served before submitting, since a missing key makes every
+request fail validation.
+
+As of the last run, `api.indexnow.org` and Yandex both accepted the submission
+with HTTP 202. Bing's own endpoint was returning HTTP 400 with "Our services
+aren't available right now", which is a Bing-side outage rather than a
+rejection of the request; Bing is a participant in the shared IndexNow
+endpoint, so the submission is already covered.
+
+Sitemaps still need submitting once through Search Console and Bing Webmaster
+Tools, and those need an account. The ping route is only for changes after
+that.
+
 ### What actually gets it indexed
 
 The technical layer is necessary but not sufficient. The site will be picked up
