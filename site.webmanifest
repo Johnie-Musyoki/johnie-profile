@@ -1,0 +1,24 @@
+{
+  "name": "John Musyoki — Cyber Security Consultant",
+  "short_name": "John Musyoki",
+  "description": "Cyber security consultant in Nairobi, Kenya. Vulnerability assessment, penetration testing, IT audit and incident response advisory.",
+  "start_url": "/johnie-profile/",
+  "scope": "/johnie-profile/",
+  "display": "standalone",
+  "background_color": "#1d1a3a",
+  "theme_color": "#5b4bd6",
+  "lang": "en-KE",
+  "icons": [
+    {
+      "src": "assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

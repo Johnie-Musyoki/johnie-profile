@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# No crawlable value in these, and they only waste crawl budget.
+Disallow: /README.md
+Disallow: /.git/
+
+Sitemap: https://johnie-musyoki.github.io/johnie-profile/sitemap.xml

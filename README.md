@@ -32,6 +32,12 @@ assets/js/main.js                      smooth scroll, scroll-spy, reveal
 assets/img/john.jpg                    portrait, carried over from the old site
 assets/fontawesome/css/all.min.css    Font Awesome 5.15.4 (vendored)
 assets/fontawesome/webfonts/*.woff2    solid + brands subsets only
+assets/img/og.png                      1200x630 social share card
+assets/img/favicon.svg                 shield mark
+robots.txt, sitemap.xml                crawl directives
+site.webmanifest                       installable metadata
+_make_icons.py                         regenerates og.png and the icons
+_seo_check.py                          validates the SEO layer
 ```
 
 ## Images
@@ -75,3 +81,64 @@ Update these in `index.html` if any change:
 - `linkedin.com/in/john-musyoki-4304a8193`
 - `github.com/Johnie-Musyoki`
 - `twitter.com/johnie_musyoki`
+
+## Search visibility
+
+The page is built to be indexable without relying on any external service.
+
+**Crawl and index signals**
+
+- `robots.txt` allows everything and points at `sitemap.xml`
+- `sitemap.xml` with an image entry for the portrait
+- `meta robots` set to `index, follow, max-image-preview:large`
+- `rel="canonical"` on the single URL, matching `og:url`
+- `lang="en-KE"` plus `geo.region` and `geo.placename` for Nairobi
+- `rel="me"` links to the LinkedIn, GitHub and X profiles, which helps entity
+  matching on name searches
+
+**Metadata**
+
+- Title at 55 characters and description at 150, both inside the range search
+  results actually display
+- Open Graph `profile` type with first and last name, and a Twitter
+  `summary_large_image` card
+- `assets/img/og.png` is a 1200x630 share card generated from the site palette,
+  so a pasted link renders as a card rather than a bare URL
+- `site.webmanifest` for the installable name and theme colour
+- `favicon.svg` plus 180px and 32px rasters
+
+**Structured data**
+
+- `Person` schema: name, job title, location, email, portrait, `knowsAbout`
+  terms, and `sameAs` profile links
+- `FAQPage` schema over the five questions in the Common questions section.
+  Google has deprecated FAQ rich results for most sites, so treat this as
+  semantic clarity rather than a rich-result strategy; the visible section is
+  what earns the impressions.
+
+**Content structure**
+
+One `h1`, no heading-level skips, every image carries alt text, and the
+questions answer real search phrasing: "penetration testing services in Kenya",
+"ISO 27001 compliance", "incident response engagement".
+
+### Checking it
+
+```
+python _seo_check.py http://127.0.0.1:8000/
+```
+
+Validates title and description lengths, canonical, Open Graph and Twitter
+tags, both JSON-LD blocks parse, every FAQ answer is visible page text (so the
+markup cannot claim something the page does not say), heading order, alt text,
+and that the crawl files are served. It runs against any URL, so the same check
+works against production.
+
+### What actually gets it indexed
+
+The technical layer is necessary but not sufficient. The site will be picked up
+by Google's sitemap submission, but ranking for terms like "cyber security
+consultant Nairobi" depends on how long the page has existed, links pointing
+at it, and competing pages. The highest-value next step is having the same
+profile URL listed on LinkedIn, GitHub and the other profiles, which is what
+the `sameAs` and `rel="me"` declarations point at.
