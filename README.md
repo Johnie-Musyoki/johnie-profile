@@ -11,6 +11,8 @@ hobbyist summary.
 
 - Title changed from Cyber Security Analyst to **Cyber Security Consultant**
 - Removed the projects section
+- Removed the Engineering skill group
+- Restored the portrait from the old site into the hero
 - Adopted the previous site's visual language: purple gradient hero, fixed
   dotted-circle sidebar, spotlight cards with a pink gradient edge, Font Awesome
   icons, and the scroll-hint down arrow
@@ -27,9 +29,18 @@ hobbyist summary.
 index.html                             single page, five sections
 assets/css/main.css                    layout, palette, responsive rules
 assets/js/main.js                      smooth scroll, scroll-spy, reveal
+assets/img/john.jpg                    portrait, carried over from the old site
 assets/fontawesome/css/all.min.css    Font Awesome 5.15.4 (vendored)
 assets/fontawesome/webfonts/*.woff2    solid + brands subsets only
 ```
+
+## Images
+
+`assets/img/john.jpg` is the portrait from `johnie.epizy.com` (1280x960). The old
+site also had `tech.jpg` and `work.jpg`; neither is used, so they were not
+carried over. If you want a fresh headshot, replace that one file — the CSS
+crops toward the top of the frame and the markup sets explicit dimensions, so
+swap in any portrait-orientation image and the layout holds.
 
 Font Awesome is vendored rather than loaded from a CDN. The CDN stylesheet was
 being rejected by subresource-integrity checks, and self-hosting removes both

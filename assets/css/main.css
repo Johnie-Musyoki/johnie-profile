@@ -169,6 +169,36 @@ h3 i { color: var(--pink); margin-right: .4rem; }
 .button.primary { background: #fff; color: var(--purple); border-color: #fff; }
 .button.primary:hover { background: transparent; color: #fff; border-color: #fff; }
 
+
+/* ---------------------------------------------------------- hero layout */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1080px;
+  width: 100%;
+}
+.hero-photo {
+  max-width: 340px;
+  margin-left: auto;
+  /* The source is 1280x960 (4:3). Fixing the ratio on the wrapper avoids
+     fighting width:100% with aspect-ratio on the image itself. */
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 4px solid rgba(255, 255, 255, .18);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .28);
+}
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Crop toward the top so the face stays in frame. */
+  object-position: center 18%;
+}
+
 /* spotlight glow behind the hero */
 .scroll-spotlight::before {
   content: '';
@@ -388,9 +418,17 @@ a:focus-visible {
   }
   #about > .content, #skills > .content { flex: 1 1 100%; min-width: 0; }
 
-  .fullscreen { min-height: 88vh; text-align: center; }
+  .fullscreen { min-height: auto; text-align: center; padding: 4rem 0 5rem; }
   .fullscreen p.txt { margin-left: auto; margin-right: auto; }
   .row { justify-content: center; }
+
+  .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero-photo {
+    order: -1;
+    max-width: 230px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 5;
+  }
 
   h1 { font-size: 2.3rem; }
   h2 { font-size: 1.45rem; }
